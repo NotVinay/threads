@@ -10,9 +10,9 @@ import Bottombar from "@/components/shared/Bottombar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'Threads',
-  description: 'A Next.js Meta Threads Application',
-}
+  title: "Threads",
+  description: "A Next.js Meta Threads Application",
+};
 
 export default function RootLayout({
   children,
@@ -24,12 +24,10 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <Topbar />
-          <main>
+          <main className="flex">
             <LeftSidebar />
             <section className="main-container">
-              <div className="w-full max-w-4xl">
-                {children}
-              </div>
+              <div className="w-full max-w-4xl">{children}</div>
             </section>
             <RightSidebar />
           </main>
