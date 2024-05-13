@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import Image from "next/image";
 import { Textarea } from "../ui/textarea";
+import { useState } from "react";
 
 interface UserData {
   id: string;
@@ -33,13 +34,15 @@ interface Props {
 }
 
 const AccountProfile = ({ user, btnTitle }: Props) => {
+  const [files, setFiles] = useState<File[]>([]);
+
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
-      profile_photo: "",
-      name: "",
-      username: "",
-      bio: "",
+      profile_photo: user?.image || "",
+      name: user?.name || "",
+      username: user?.username || "",
+      bio: user?.bio || "",
     },
   });
 
@@ -51,9 +54,19 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 
   function handleImage(
     e: React.ChangeEvent<HTMLInputElement>,
-    field: (value: string) => void
+    fieldOnChange: (value: string) => void
   ) {
     e.preventDefault();
+    const fileReader = new FileReader();
+    if (e.target?.files?.length) {
+      const file = e.target.files[0];
+      if (!file.type.includes("image")) return;
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        fieldOnChange(fileReader.result as string);
+        setFiles([file]);
+      };
+    }
   }
 
   return (
