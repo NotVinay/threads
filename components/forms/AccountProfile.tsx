@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import Image from "next/image";
 import { Textarea } from "../ui/textarea";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/lib/uploadthing";
 import { updateUser } from "@/lib/actions/user.action";
@@ -84,7 +84,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
   };
 
   function handleImage(
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: ChangeEvent<HTMLInputElement>,
     fieldOnChange: (value: string) => void
   ) {
     e.preventDefault();
