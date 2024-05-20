@@ -1,5 +1,5 @@
 import PostThread from "@/components/forms/PostThread";
-import { fetchUser } from "@/lib/actions/user.action";
+import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
@@ -11,11 +11,13 @@ async function Page() {
 
   if (!userInfo?.onboarded) redirect("/onboarded");
 
+  const userId = userInfo?._id?.toString();
+
   return (
     <>
       <h1 className="head-text">Create Threads</h1>
 
-      <PostThread userId={userInfo._id} />
+      <PostThread userId={userId} />
     </>
   );
 }
