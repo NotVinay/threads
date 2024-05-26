@@ -12,6 +12,7 @@ interface PageParams {
 const ThreadPage = async ({ params }: { params: PageParams }) => {
   if (!params.id) return null;
   // TODO: Investigate why threads/styles.css.map is getting called everytime this page is visited.
+  // Happens on dev mode and when browsers dev console is open.
   if (params.id === "styles.css.map") return null;
   const user = await currentUser();
 
