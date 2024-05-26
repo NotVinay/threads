@@ -2,7 +2,7 @@ import ProfileHeader from "@/components/shared/ProfileHeader";
 import ThreadsTab from "@/components/shared/ThreadsTab";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
-import { fetchUser } from "@/lib/actions/user.actions";
+import { fetchUserPosts } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -16,21 +16,21 @@ const Page = async ({ params }: { params: ProfileParams }) => {
   if (!user) return null;
 
   // Fetch the user profile through the id from params.
-  const userInfo = await fetchUser(params.id);
+  const userInfoWithThreads = await fetchUserPosts(params.id);
 
-  if (!userInfo?.onboarded) redirect("/onboarded");
+  if (!userInfoWithThreads?.onboarded) redirect("/onboarded");
 
-  const userId = userInfo?._id?.toString();
+  const userId = userInfoWithThreads?._id?.toString();
 
   return (
     <section>
       <ProfileHeader
-        accountId={userInfo.id}
+        accountId={userInfoWithThreads.id}
         authUserId={user.id}
-        name={userInfo.name}
-        username={userInfo.username}
-        imgUrl={userInfo.image}
-        bio={userInfo.bio}
+        name={userInfoWithThreads.name}
+        username={userInfoWithThreads.username}
+        imgUrl={userInfoWithThreads.image}
+        bio={userInfoWithThreads.bio}
       />
       <div className="mt-9">
         <Tabs defaultValue="threads" className="w-full">
@@ -47,7 +47,7 @@ const Page = async ({ params }: { params: ProfileParams }) => {
                 <p className="max-sm:hidden">{tab.label}</p>
                 {tab.label === "Threads" && (
                   <p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
-                    {userInfo?.threads?.length ?? 0}
+                    {userInfoWithThreads?.threads?.length ?? 0}
                   </p>
                 )}
               </TabsTrigger>
@@ -61,7 +61,7 @@ const Page = async ({ params }: { params: ProfileParams }) => {
             >
               <ThreadsTab
                 currentUserId={user.id}
-                accountId={userInfo.id}
+                accountId={userInfoWithThreads.id}
                 accountType="User"
               />
             </TabsContent>
